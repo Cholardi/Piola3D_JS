@@ -122,13 +122,13 @@ function ordenar_productos() {
         case 1:
             const productos_disponibles_precio_desc = productos_disponibles.sort((a, b) => b.precio - a.precio);
             navegar_catalogo(productos_disponibles_precio_desc);
-            console.log(productos_disponibles_precio_desc);
+            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
             break;
 
         case 2:
             const productos_disponibles_precio_asc = productos_disponibles.sort((a, b) => a.precio - b.precio);
             navegar_catalogo(productos_disponibles_precio_asc);
-            console.log(productos_disponibles_precio_asc);
+            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
             break;
 
         case 3:
@@ -141,7 +141,7 @@ function ordenar_productos() {
                 }
             });
             navegar_catalogo(productos_disponibles_precio_AZ);
-            console.log(productos_disponibles_precio_AZ);
+            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
             break;
 
         case 4:
@@ -154,7 +154,7 @@ function ordenar_productos() {
                 }
             });
             navegar_catalogo(productos_disponibles_precio_ZA);
-            console.log(productos_disponibles_precio_ZA);
+            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
             break;
 
         case 5:
@@ -164,6 +164,19 @@ function ordenar_productos() {
         default:
             alert("Opción Incorrecta.");
             break;
+    }
+}
+
+function filtrar_productos() {
+    let limite_min = parseInt(prompt("Ingresá el precio mínimo (sin signo $): "));
+    let limite_max = parseInt(prompt("Ingresá el precio máximo (sin signo $): "));
+    const productos_disponibles_filtro_precio = productos_disponibles.filter(prod => prod.precio >= limite_min && prod.precio <= limite_max);
+    if (productos_disponibles_filtro_precio.length == 0) {
+        alert("No se encontró ningún producto que cumpla con los filtros aplicados.")
+    }
+    else {
+        navegar_catalogo(productos_disponibles_filtro_precio);
+        monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
     }
 }
 
@@ -186,12 +199,10 @@ do {
 
         case 3:
             ordenar_productos(productos_disponibles);
-            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
             break;
 
         case 4:
-            navegar_catalogo(productos_disponibles);
-            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+            filtrar_productos(productos_disponibles);
             break;
 
         case 5:
