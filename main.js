@@ -32,8 +32,25 @@ productos_disponibles.push(iron_throne);
 productos_disponibles.push(laberinto);
 
 // Funciones
+function elegir_menu() {
+    let indice = parseInt(prompt("Ingresá una opción: \n 1) Ver productos disponibles \n 2) Buscar productos \n 3) Ver productos ordenados \n 4) Ver productos filtrando por precio \n 5) Ver carrito de compras \n 6) Salir"));
+    return indice;
+}
+
+function chequeo_num_positivo(num) {
+    return num <= 0 || isNaN(num);
+}
+
 function elegir_cantidad(item) {
-    return parseInt(prompt("¿Qué cantidad de unidades del producto " + item.nombre + " te gustaría agregar al carrito? (Escribí un número entero positivo)."));
+    let cant;
+    do {
+        cant = parseInt(prompt("¿Qué cantidad de unidades del producto " + item.nombre + " te gustaría agregar al carrito? (Escribí un número entero positivo)."));
+        if (chequeo_num_positivo(cant)) {
+            alert("¡Eso no es un número entero positivo! Intentá de nuevo.");
+        }
+    }
+    while (chequeo_num_positivo(cant));
+    return cant;
 }
 
 function agregar_al_carrito(item, cant, array_carrito) {
@@ -43,35 +60,87 @@ function agregar_al_carrito(item, cant, array_carrito) {
     alert('El producto "' + item.nombre + '" ha sido agregado ' + cant + ' veces al carrito correctamente!');
 }
 
-function navegar_catalogo(item, texto_variable) {
-    return prompt('Producto: ' + item.nombre + '. Precio: ' + item.precio + '. Escribí "lo quiero" para agregar al carrito de compras.' + texto_variable);
+function navegacion_interna_catalogo(item, texto_variable) {
+    return prompt('Producto: ' + item.nombre + '. \nPrecio: $' + item.precio + '.\nEscribí "lo quiero" para agregar al carrito de compras. ' + texto_variable);
 }
 
-// Navegación de productos y agregar al carrito
-for (let producto of productos_disponibles) {
-    if (productos_disponibles.indexOf(producto) == productos_disponibles.length - 1) {
-        let navegacion_catalogo = navegar_catalogo(producto, 'Este es el último producto del catálogo. Tocá el botón de aceptar o cancelar para finalizar y ver el carrito.');
-        if (navegacion_catalogo == "lo quiero") {
-            cantidad = elegir_cantidad(producto);
-            agregar_al_carrito(producto, cantidad, productos_en_carrito);
-        }
+function monto_carrito(array_carrito, valor_base) {
+    if (array_carrito.length == 0) {
+        alert("¡No agregaste ningún producto al carrito!");
     }
     else {
-        let navegacion_catalogo = navegar_catalogo(producto, 'Tocá el botón de aceptar o cancelar para ver otros productos.');
-        if (navegacion_catalogo == "lo quiero") {
-            cantidad = elegir_cantidad(producto);
-            agregar_al_carrito(producto, cantidad, productos_en_carrito);
-        }
+        // Cálculo del total a pagar
+        total_a_pagar = array_carrito.reduce((acumulador, elemento) => acumulador + elemento.precio, valor_base);
+        // Mensaje total a pagar
+        alert("El total a pagar por los productos seleccionados es: $" + total_a_pagar + ".");
     }
+}
+
+function navegar_catalogo(array_productos) {
+    // Navegación de productos y agregar al carrito
+    for (let producto of array_productos) {
+        if (array_productos.indexOf(producto) == array_productos.length - 1) {
+            let navegacion_catalogo = navegacion_interna_catalogo(producto, 'Este es el último producto del catálogo. Tocá el botón de aceptar o cancelar para finalizar y ver el carrito.');
+            if (navegacion_catalogo == "lo quiero") {
+                cantidad = elegir_cantidad(producto);
+                agregar_al_carrito(producto, cantidad, productos_en_carrito);
+            }
+        }
+        else {
+            let navegacion_catalogo = navegacion_interna_catalogo(producto, 'Tocá el botón de aceptar o cancelar para ver otros productos.');
+            if (navegacion_catalogo == "lo quiero") {
+                cantidad = elegir_cantidad(producto);
+                agregar_al_carrito(producto, cantidad, productos_en_carrito);
+            }
+        }
+    };
 };
 
-// Cálculo del total a pagar
-total_a_pagar = productos_en_carrito.reduce((acumulador, elemento) => acumulador + elemento.precio, tarifa_procesamiento_orden);
+// Cartel de bienvenida
+alert("¡Bienvenidx al menú de la tienda de Piola3D!");
+
+let indice_menu;
+do {
+    indice_menu = elegir_menu();
+    switch (indice_menu) {
+        case 1:
+            navegar_catalogo(productos_disponibles);
+            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+            break;
+
+        case 2:
+            buscar_en_catalogo(productos_disponibles);
+
+            break;
+
+        case 3:
+            navegar_catalogo(productos_disponibles);
+            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+            break;
+
+        case 4:
+            navegar_catalogo(productos_disponibles);
+            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+            break;
+
+        case 5:
+            console.log(productos_en_carrito);
+            monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+            break;
+
+        case 6:
+            alert("¡Hasta Luego!");
+            break;
+
+        default:
+            alert("Opción Incorrecta.");
+            break;
+    }
+}
+while (indice_menu != 6);
 
 // Revisión carrito
 console.log("productos en el carrito: ");
 console.log(productos_en_carrito);
 console.log("total a pagar: " + total_a_pagar);
 
-// Mensaje total a pagar
-alert("El total a pagar por los productos seleccionados es: $" + total_a_pagar + ".");
