@@ -98,7 +98,7 @@ function navegar_catalogo(array_productos) {
 
 function buscar_en_catalogo(array_productos) {
     let busqueda = prompt("Escribí el nombre exacto del producto que buscás: ");
-    if (array_productos.includes(busqueda)) {
+    if (array_productos.some(prod => prod.nombre === busqueda)){
         let producto_buscado = array_productos.find(prod => prod.nombre === busqueda);
 
         let navegacion_catalogo = navegacion_interna_catalogo(producto_buscado, "");
