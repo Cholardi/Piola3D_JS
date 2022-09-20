@@ -17,7 +17,7 @@ class Producto {
 const darth_vader = new Producto("Busto Darth Vader", 1800);
 const millennium_falcon = new Producto("Millennium Falcon", 3200);
 const minas_tirith = new Producto("Minas Tirith", 2800);
-const iron_throne = new Producto("Iron Throne", 4100);
+const grogu = new Producto("Grogu", 2200);
 const laberinto = new Producto("Laberinto Cilindrico", 1100);
 
 // Declaración de arrays
@@ -28,7 +28,7 @@ const productos_en_carrito = [];
 productos_disponibles.push(darth_vader);
 productos_disponibles.push(millennium_falcon);
 productos_disponibles.push(minas_tirith);
-productos_disponibles.push(iron_throne);
+productos_disponibles.push(grogu);
 productos_disponibles.push(laberinto);
 
 // Funciones
@@ -65,14 +65,12 @@ function navegacion_interna_catalogo(item, texto_variable) {
 }
 
 function monto_carrito(array_carrito, valor_base) {
-    if (array_carrito.length == 0) {
-        alert("¡No agregaste ningún producto al carrito!");
-    }
-    else {
+    if (array_carrito.length > 0) {
         // Cálculo del total a pagar
         total_a_pagar = array_carrito.reduce((acumulador, elemento) => acumulador + elemento.precio, valor_base);
         // Mensaje total a pagar
-        alert("El total a pagar por los productos seleccionados es: $" + total_a_pagar + ".");
+        const carrito_total = document.getElementById("carrito_total");
+        carrito_total.innerText = "El total a pagar por los productos seleccionados es: $" + total_a_pagar + ".";
     }
 }
 
@@ -98,7 +96,7 @@ function navegar_catalogo(array_productos) {
 
 function buscar_en_catalogo(array_productos) {
     let busqueda = prompt("Escribí el nombre exacto del producto que buscás: ");
-    if (array_productos.some(prod => prod.nombre === busqueda)){
+    if (array_productos.some(prod => prod.nombre === busqueda)) {
         let producto_buscado = array_productos.find(prod => prod.nombre === busqueda);
 
         let navegacion_catalogo = navegacion_interna_catalogo(producto_buscado, "");
@@ -180,9 +178,28 @@ function filtrar_productos() {
     }
 }
 
+// Genero cards de los productos que tengo
+const cards_container = document.getElementById("cards_container");
 
-// Cartel de bienvenida
-alert("¡Bienvenidx al menú de la tienda de Piola3D!");
+productos_disponibles.forEach(producto => {
+    let card = document.createElement("div");
+    card.className = "col";
+    card.innerHTML = `<div class="card text-center h-100">
+                        <div class="img_wrapper">
+                            <a href=""><img src="imgs/productos/${producto.nombre}.jpg"
+                                    class="card-img-top img_link" alt="${producto.nombre}"></a>
+                        </div>
+                        <div class="card-body d-flex flex-column align-items-center justify-content-around">
+                            <h3 class="card-title"><a class="text_link_oscuro"
+                                    href="">${producto.nombre}</a></h3>
+                            <p class="precio_prod">$${producto.precio}</p>
+                            <p id="btn_cart" class="btn btn-dark btn_custom_mid">Agregar al
+                                Carrito</p>
+                        </div>
+                    </div>`;
+
+    cards_container.appendChild(card);
+});
 
 let indice_menu;
 do {
