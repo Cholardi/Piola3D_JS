@@ -71,15 +71,23 @@ function evento_click_btn(accion, prod, id_prefix) {
 
 function agregar_al_carrito(id_prod) {
     const item = productos_disponibles.find(producto => producto.id === id_prod);
-    productos_en_carrito.push(item);
+    const producto_ya_en_carrito = productos_en_carrito.find(producto => producto.id === id_prod);
+    if (producto_ya_en_carrito) {
+        producto_ya_en_carrito.cant_pickeada++;
+    }
+    else {
+        productos_en_carrito.push(item);
+    }
+    visualizar_carrito();
 }
 
-function visualizar_carrito(array_carrito, id_contenedor) {
-    const contenedor_carrito = document.getElementById(id_contenedor);
+function visualizar_carrito() {
+    const contenedor_carrito = document.getElementById("contenedor_carrito");
 
+    let rescate_producto;
     let cards_agregadas = "";
 
-    array_carrito.forEach(producto => {
+    productos_en_carrito.forEach(producto => {
         cards_agregadas += `
                         <div class="col">
                             <div class="card text-center h-100">
@@ -91,34 +99,32 @@ function visualizar_carrito(array_carrito, id_contenedor) {
                                     <h3 class="card-title"><a class="text_link_oscuro"
                                             href="">${producto.nombre}</a></h3>
                                     <p class="precio_prod">$${producto.precio}</p>
-                                    <button id="btn_ers${producto.id}" class="btn btn-dark btn_custom_mid">Eliminar del
-                                        Carrito</button>
+                                    <p>Cantidad: ${producto.cant_pickeada}</p>
+                                    <button id="btn_ers${producto.id}" class="btn btn-dark btn_custom_mid">Eliminar del Carrito</button>
                                 </div>
                             </div>
                         </div>`;
-
-        contenedor_carrito.innerHTML = cards_agregadas;
-
-        evento_click_btn(eliminar_del_carrito, producto, "btn_ers");
     });
+
+    contenedor_carrito.innerHTML = cards_agregadas;
+    // evento_click_btn(eliminar_del_carrito, producto, "btn_ers");
+
 }
 
 function eliminar_del_carrito(id_prod) {
+
     const item = productos_en_carrito.find(producto => producto.id === id_prod);
-    console.log(id_prod);
-    console.log(item);
     productos_en_carrito.splice(productos_en_carrito.indexOf(item), 1);
+    visualizar_carrito();
 }
 
 function vaciar_carrito() {
     const vaciar_carrito = document.getElementById("vaciar_carrito");
     vaciar_carrito.addEventListener("click", () => {
         productos_en_carrito.splice(0, productos_en_carrito.length);
-        visualizar_carrito(productos_en_carrito, "contenedor_carrito");
+        visualizar_carrito();
     });
 }
-
-vaciar_carrito();
 
 // function elegir_menu() {
 //     let indice = parseInt(prompt("Ingresá una opción: \n 1) Ver productos disponibles \n 2) Buscar productos \n 3) Ver productos ordenados \n 4) Ver productos filtrando por precio \n 5) Ver carrito de compras \n 6) Salir"));
@@ -305,8 +311,8 @@ vaciar_carrito();
 // }
 // while (indice_menu != 6);
 
-
 crear_cards_productos(productos_disponibles, "cards_container");
+vaciar_carrito();
 
 
 // Revisión carrito
