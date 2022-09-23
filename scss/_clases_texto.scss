@@ -1,0 +1,79 @@
+/* -- Clases texto -- */
+
+*{
+    font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-weight: 700;
+}
+
+.custom_h1_title {
+    font-size: calc(2rem + 2.5vw);
+}
+
+.custom_h1_subtitle {
+    font-size: calc(1rem + .5vw);
+}
+
+.custom_h2_title {
+    font-size: calc(1.5rem + 1.5vw);
+}
+
+.lead_custom {
+    font-size: 1.1rem;
+}
+
+p span {
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.custom_h1_carousel_index {
+    font-size: 8vw;
+}
+
+.custom_p_carousel_index {
+    font-size: 3vw;
+}
+
+.custom_h1_carousel_index2 {
+    font-size: 4.5vw;
+}
+
+.custom_p_carousel_index2 {
+    font-size: 2.2vw;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+.precio_prod {
+    font-size: 50px;
+    margin-bottom: .5rem;
+}
+
+.paso_cierre {
+    @extend .text_link_claro;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+@media screen and (min-width: 992px) {
+    .centrado {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .bloque_titulo{
+        background-color: $fondo_transoscuro;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+}

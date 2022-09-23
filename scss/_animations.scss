@@ -1,0 +1,106 @@
+/* -- ANIMATIONS -- */
+
+.animate_agrandar {
+    animation-name: agrandar;
+    animation-duration: 1.5s;
+    animation-timing-function: ease;
+}
+
+.animate_slidein_ltr {
+    animation-name: slide_in_ltr;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+}
+
+.animate_slidein_rtl {
+    animation-name: slide_in_rtl;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-delay: .5s;
+    transform: translateX(80vw);
+    animation-fill-mode: forwards;
+}
+
+@keyframes agrandar {
+    0% {
+        opacity: 0;
+        transform: scale(.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slide_in_ltr {
+    0% {
+        opacity: 0;
+        transform: translateX(-80vw);
+    }
+
+    100%{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide_in_rtl {
+    0% {
+        opacity: 0;
+        transform: translateX(80vw);
+    }
+
+    100%{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* -- TRANSITIONS -- */
+
+a{
+    transition-duration: .2s;
+    transition-timing-function: ease;
+}
+
+/* -- Social links -- */
+$social_link:(
+    instagram: rgb(255, 166, 0),
+    facebook: rgb(0, 140, 255),
+    whatsapp: rgb(75, 228, 29),
+);
+
+@each $red, $color in $social_link {
+    .bi-#{$red}:hover{
+        color: $color;
+    }   
+}
+
+.bi{
+    transition-duration: .2s;
+    transition-timing-function: ease;
+}
+
+/* -- Text links -- */
+.text_link_claro {
+    @include text_link ($casiblanco, white);
+}
+
+.text_link_oscuro {
+    @include text_link ($fondo_semioscuro, black);
+}
+
+/* -- Image links -- */
+.img_link {
+    transition-duration: .5s;
+    transition-timing-function: ease;
+
+    &:hover{
+        transform: scale(1.08);
+    }
+}
+
+.img_wrapper{
+    overflow: hidden;
+}
