@@ -25,6 +25,11 @@ const laberinto = new Producto(5, "Laberinto Cilindrico", 1100, "../imgs/product
 // Declaración de arrays
 const productos_disponibles = [];
 const productos_en_carrito = [];
+// si hay productos agregados al carrito en el localStorage, los agrego al array correspondiente
+if (localStorage.getItem("productos_carrito")) {
+    let productos_en_carrito_storage = JSON.parse(localStorage.getItem("productos_carrito"));
+    productos_en_carrito.push(...productos_en_carrito_storage);
+}
 
 // Asignación de productos dispoinibles en un array
 productos_disponibles.push(darth_vader);
@@ -49,35 +54,15 @@ function crear_cards_productos(array_productos, id_contenedor) {
                                 <h3 class="card-title"><a class="text_link_oscuro"
                                         href="">${producto.nombre}</a></h3>
                                 <p class="precio_prod">$${producto.precio}</p>
-                                <button id="btn${producto.id}" class="btn btn-dark btn_custom_mid">Agregar al
+                                <button id="btn${producto.id}" class="btn btn-dark btn_custom_mid mb-2">Agregar al
                                     Carrito</button>
                             </div>
                         </div>`;
 
         cards_container.appendChild(card);
 
-        evento_click_btn(agregar_al_carrito, producto, "btn");
+        agregar_al_carrito(producto.id);
     });
-}
-
-function evento_click_btn(accion, prod, id_prefix) {
-    const cart_btn = document.getElementById(`${id_prefix}${prod.id}`);
-    cart_btn.addEventListener("click", () => {
-        accion(prod.id);
-        visualizar_carrito();
-    });
-}
-
-function agregar_al_carrito(id_prod) {
-    const item = productos_disponibles.find(producto => producto.id === id_prod);
-    const producto_ya_en_carrito = productos_en_carrito.find(producto => producto.id === id_prod);
-    if (producto_ya_en_carrito) {
-        producto_ya_en_carrito.cant_pickeada++;
-    }
-    else {
-        productos_en_carrito.push(item);
-    }
-
 }
 
 function visualizar_carrito() {
@@ -97,8 +82,9 @@ function visualizar_carrito() {
                                     <h3 class="card-title"><a class="text_link_oscuro"
                                             href="">${producto.nombre}</a></h3>
                                     <p class="precio_prod">$${producto.precio}</p>
-                                    <p>Cantidad: ${producto.cant_pickeada}</p>
-                                    <button onClick = "eliminar_del_carrito(${producto.id})" class="btn btn-dark btn_custom_mid">Eliminar del Carrito</button>
+                                    <label for="cant_pickeada_incart${producto.id}">Cantidad:</label>
+                                    <input id="cant_pickeada_incart${producto.id}" type="number" name="cant_pickeada_incart${producto.id}" value="${producto.cant_pickeada}" min="1" />
+                                    <button onClick = "eliminar_del_carrito(${producto.id})" class="btn btn-dark btn_custom_mid mb-2 mt-3">Eliminar del Carrito</button>
                                 </div>
                             </div>
                         </div>`;
@@ -106,6 +92,27 @@ function visualizar_carrito() {
 
     contenedor_carrito.innerHTML = cards_agregadas;
     calcular_total_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+    localStorage.setItem("productos_carrito", JSON.stringify(productos_en_carrito));
+}
+
+function producto_ya_en_carrito(id_prod) {
+    const producto_ya_en_carrito = productos_en_carrito.find(producto => producto.id === id_prod);
+    return producto_ya_en_carrito;
+}
+
+function agregar_al_carrito(id_prod) {
+    const add2cart_btn = document.getElementById(`btn${id_prod}`);
+    const item = productos_disponibles.find(producto => producto.id === id_prod);
+    add2cart_btn.addEventListener("click", () => {
+        if (producto_ya_en_carrito(id_prod)) {
+            producto_ya_en_carrito(id_prod).cant_pickeada++;
+        }
+        else {
+            productos_en_carrito.push(item);
+        }
+        visualizar_carrito();
+    });
+
 }
 
 function eliminar_del_carrito(id_prod) {
@@ -121,6 +128,9 @@ function vaciar_carrito() {
         visualizar_carrito();
     });
 }
+
+
+
 
 function calcular_total_carrito(array_carrito, valor_base) {
     const total_carrito = document.getElementById("total_carrito");
@@ -225,4 +235,19 @@ function calcular_total_carrito(array_carrito, valor_base) {
 
 
 crear_cards_productos(productos_disponibles, "cards_container");
+visualizar_carrito();
 vaciar_carrito();
+
+// // INTENTO MODIFICACION CANTIDAD PRODUCTO CARRITO
+// function modificar_cantidad_pickeada(id_prod) {
+//     while (producto_ya_en_carrito(1)) {
+//         const cantidad_pickeada = document.getElementById(`cant_pickeada_incart1`);
+//         console.log(cantidad_pickeada);
+
+//         cantidad_pickeada.addEventListener("change", () => {
+//             const item = productos_en_carrito.find(producto => producto.id === 1);
+//             item.cant_pickeada = cantidad_pickeada.value;
+//             visualizar_carrito();
+//         });
+//     };
+// }
