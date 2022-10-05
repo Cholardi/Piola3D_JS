@@ -104,12 +104,7 @@ function agregar_al_carrito(id_prod) {
     const add2cart_btn = document.getElementById(`btn${id_prod}`);
     const item = productos_disponibles.find(producto => producto.id === id_prod);
     add2cart_btn.addEventListener("click", () => {
-        if (producto_ya_en_carrito(id_prod)) {
-            producto_ya_en_carrito(id_prod).cant_pickeada++;
-        }
-        else {
-            productos_en_carrito.push(item);
-        }
+        producto_ya_en_carrito(id_prod) ? producto_ya_en_carrito(id_prod).cant_pickeada++ : productos_en_carrito.push(item);
         visualizar_carrito();
     });
 
@@ -132,12 +127,7 @@ function vaciar_carrito() {
 function calcular_total_carrito(array_carrito, valor_base) {
     const total_carrito = document.getElementById("total_carrito");
     total_a_pagar = array_carrito.reduce((acumulador, prod) => acumulador + prod.precio * prod.cant_pickeada, valor_base);
-    if (total_a_pagar == valor_base) {
-        total_carrito.innerText = 0;
-    }
-    else {
-        total_carrito.innerText = `${total_a_pagar} (Productos: $${total_a_pagar - valor_base}, Tarifa de procesamiento de orden: $${valor_base}).`;
-    }
+    total_a_pagar == valor_base ? total_carrito.innerText = 0 : total_carrito.innerText = `${total_a_pagar} (Productos: $${total_a_pagar - valor_base}, Tarifa de procesamiento de orden: $${valor_base}).`;
 }
 
 
