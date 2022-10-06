@@ -105,6 +105,13 @@ function agregar_al_carrito(id_prod) {
     const item = productos_disponibles.find(producto => producto.id === id_prod);
     add2cart_btn.addEventListener("click", () => {
         producto_ya_en_carrito(id_prod) ? producto_ya_en_carrito(id_prod).cant_pickeada++ : productos_en_carrito.push(item);
+        Toastify({
+            text: `El producto ${item.nombre} ha sido agregado al carrito exitosamente.`,
+            duration: 2000,
+            style: {
+                background: "#E46526"
+            }
+        }).showToast();
         visualizar_carrito();
     });
 
@@ -113,6 +120,13 @@ function agregar_al_carrito(id_prod) {
 function eliminar_del_carrito(id_prod) {
     const item = productos_en_carrito.find(producto => producto.id === id_prod);
     productos_en_carrito.splice(productos_en_carrito.indexOf(item), 1);
+    Toastify({
+        text: `El producto ${item.nombre} ha sido eliminado del carrito exitosamente.`,
+        duration: 2000,
+        style: {
+            background: "#171717"
+        }
+    }).showToast();
     visualizar_carrito();
 }
 
@@ -120,6 +134,14 @@ function vaciar_carrito() {
     const vaciar_carrito = document.getElementById("vaciar_carrito");
     vaciar_carrito.addEventListener("click", () => {
         productos_en_carrito.splice(0, productos_en_carrito.length);
+        Swal.fire({
+            title:"El carrito ha sido vaciado exitosamente.",
+            text: 'Presione "Aceptar" para seguir navegando el sitio.',
+            color: "white",
+            icon: "warning",
+            background:"#353535",
+            confirmButtonText: "Aceptar"
+        });
         visualizar_carrito();
     });
 }
