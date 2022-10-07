@@ -131,19 +131,23 @@ function eliminar_del_carrito(id_prod) {
 }
 
 function vaciar_carrito() {
-    const vaciar_carrito = document.getElementById("vaciar_carrito");
-    vaciar_carrito.addEventListener("click", () => {
-        productos_en_carrito.splice(0, productos_en_carrito.length);
-        Swal.fire({
-            title:"El carrito ha sido vaciado exitosamente.",
-            text: 'Presione "Aceptar" para seguir navegando el sitio.',
-            color: "white",
-            icon: "warning",
-            background:"#353535",
-            confirmButtonText: "Aceptar"
-        });
-        visualizar_carrito();
+    productos_en_carrito.splice(0, productos_en_carrito.length);
+    Swal.fire({
+        title: "El carrito ha sido vaciado exitosamente.",
+        text: 'Presione "Aceptar" para seguir navegando el sitio.',
+        color: "white",
+        icon: "warning",
+        background: "#353535",
+        confirmButtonText: "Aceptar"
     });
+    visualizar_carrito();
+}
+
+// INTENTO MODIFICACION CANTIDAD PRODUCTO CARRITO
+function modificar_cantidad_pickeada(id_prod) {
+    const item = productos_en_carrito.find(producto => producto.id === id_prod);
+    item.cant_pickeada = cantidad_pickeada.value;
+    visualizar_carrito();
 }
 
 function calcular_total_carrito(array_carrito, valor_base) {
@@ -155,4 +159,104 @@ function calcular_total_carrito(array_carrito, valor_base) {
 
 crear_cards_productos(productos_disponibles, "cards_container");
 visualizar_carrito();
-vaciar_carrito();
+
+const vaciar_carrito_btn = document.getElementById("vaciar_carrito");
+vaciar_carrito_btn.addEventListener("click", vaciar_carrito);
+
+const cantidad_pickeada = document.getElementById(`cant_pickeada_incart1`);
+const cant_pickeada_value = cantidad_pickeada.value;
+console.log(cant_pickeada_value);
+cantidad_pickeada.addEventListener("change", modificar_cantidad_pickeada(1));
+
+// function chequeo_num_positivo(num) {
+//     return num <= 0 || isNaN(num);
+// }
+
+
+// function buscar_en_catalogo(array_productos) {
+//     let busqueda = prompt("Escribí el nombre exacto del producto que buscás: ");
+//     if (array_productos.some(prod => prod.nombre === busqueda)) {
+//         let producto_buscado = array_productos.find(prod => prod.nombre === busqueda);
+
+//         let navegacion_catalogo = navegacion_interna_catalogo(producto_buscado, "");
+//         if (navegacion_catalogo == "lo quiero") {
+//             cantidad = elegir_cantidad(producto_buscado);
+//             agregar_al_carrito(producto_buscado, cantidad, productos_en_carrito);
+//         }
+//     }
+//     else {
+//         alert('No se encontraron existencias del producto "' + busqueda + '".');
+//     }
+// }
+
+// function elegir_orden_productos() {
+//     let orden = parseInt(prompt("Elegí en qué orden querés ver los productos: \n 1) Precio: Mayor a Menor \n 2) Precio: Menor a Mayor \n 3) Nombre: A-Z \n 4) Nombre: Z-A \n 5) Salir"));
+//     return orden;
+// }
+
+// function ordenar_productos() {
+//     switch (elegir_orden_productos()) {
+//         case 1:
+//             const productos_disponibles_precio_desc = productos_disponibles.sort((a, b) => b.precio - a.precio);
+//             navegar_catalogo(productos_disponibles_precio_desc);
+//             monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+//             break;
+
+//         case 2:
+//             const productos_disponibles_precio_asc = productos_disponibles.sort((a, b) => a.precio - b.precio);
+//             navegar_catalogo(productos_disponibles_precio_asc);
+//             monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+//             break;
+
+//         case 3:
+//             const productos_disponibles_precio_AZ = productos_disponibles.sort((a, b) => {
+//                 if (a.nombre < b.nombre) {
+//                     return -1;
+//                 }
+//                 if (a.nombre > b.nombre) {
+//                     return 1;
+//                 }
+//             });
+//             navegar_catalogo(productos_disponibles_precio_AZ);
+//             monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+//             break;
+
+//         case 4:
+//             const productos_disponibles_precio_ZA = productos_disponibles.sort((a, b) => {
+//                 if (a.nombre < b.nombre) {
+//                     return 1;
+//                 }
+//                 if (a.nombre > b.nombre) {
+//                     return -1;
+//                 }
+//             });
+//             navegar_catalogo(productos_disponibles_precio_ZA);
+//             monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+//             break;
+
+//         case 5:
+//             alert("¡Hasta Luego!");
+//             break;
+
+//         default:
+//             alert("Opción Incorrecta.");
+//             break;
+//     }
+// }
+
+// function filtrar_productos() {
+//     let limite_min = parseInt(prompt("Ingresá el precio mínimo (sin signo $): "));
+//     let limite_max = parseInt(prompt("Ingresá el precio máximo (sin signo $): "));
+//     const productos_disponibles_filtro_precio = productos_disponibles.filter(prod => prod.precio >= limite_min && prod.precio <= limite_max);
+//     if (productos_disponibles_filtro_precio.length == 0) {
+//         alert("No se encontró ningún producto que cumpla con los filtros aplicados.")
+//     }
+//     else {
+//         navegar_catalogo(productos_disponibles_filtro_precio);
+//         monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+//     }
+// }
+
+
+
+
