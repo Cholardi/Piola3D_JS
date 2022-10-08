@@ -83,7 +83,7 @@ function visualizar_carrito() {
                                             href="">${producto.nombre}</a></h3>
                                     <p class="precio_prod">$${producto.precio}</p>
                                     <label for="cant_pickeada_incart${producto.id}">Cantidad:</label>
-                                    <input id="cant_pickeada_incart${producto.id}" type="number" name="cant_pickeada_incart${producto.id}" value="${producto.cant_pickeada}" min="1" />
+                                    <input onChange ="modificar_cantidad_pickeada(${producto.id})" id="cant_pickeada_incart${producto.id}" type="number" name="cant_pickeada_incart${producto.id}" value="${producto.cant_pickeada}" min="1" />
                                     <button onClick = "eliminar_del_carrito(${producto.id})" class="btn btn-dark btn_custom_mid mb-2 mt-3">Eliminar del Carrito</button>
                                 </div>
                             </div>
@@ -120,6 +120,7 @@ function agregar_al_carrito(id_prod) {
 function eliminar_del_carrito(id_prod) {
     const item = productos_en_carrito.find(producto => producto.id === id_prod);
     productos_en_carrito.splice(productos_en_carrito.indexOf(item), 1);
+    item.cant_pickeada = 1;
     Toastify({
         text: `El producto ${item.nombre} ha sido eliminado del carrito exitosamente.`,
         duration: 2000,
@@ -131,6 +132,9 @@ function eliminar_del_carrito(id_prod) {
 }
 
 function vaciar_carrito() {
+    productos_en_carrito.forEach(producto => {
+        producto.cant_pickeada=1;
+    });
     productos_en_carrito.splice(0, productos_en_carrito.length);
     Swal.fire({
         title: "El carrito ha sido vaciado exitosamente.",
@@ -143,9 +147,28 @@ function vaciar_carrito() {
     visualizar_carrito();
 }
 
-// INTENTO MODIFICACION CANTIDAD PRODUCTO CARRITO
+function efectuar_compra(){
+    productos_en_carrito.forEach(producto => {
+        producto.cant_pickeada=1;
+    });
+    productos_en_carrito.splice(0, productos_en_carrito.length);
+    Swal.fire({
+        title: "Compra realizada exitosamente.",
+        text: '¡Gracias por tu compra! Monto: $'+total_carrito.innerText,
+        color: "white",
+        icon: "success",
+        background: "#353535",
+        confirmButtonText: "Aceptar",
+        // showCancelButton: true,
+        // cancelButtonText: "Volver al carrito",
+        // cancelButtonColor: "#dd6b55",
+    });
+    visualizar_carrito();
+}
+
 function modificar_cantidad_pickeada(id_prod) {
     const item = productos_en_carrito.find(producto => producto.id === id_prod);
+    const cantidad_pickeada = document.getElementById(`cant_pickeada_incart${id_prod}`);
     item.cant_pickeada = cantidad_pickeada.value;
     visualizar_carrito();
 }
@@ -163,10 +186,21 @@ visualizar_carrito();
 const vaciar_carrito_btn = document.getElementById("vaciar_carrito");
 vaciar_carrito_btn.addEventListener("click", vaciar_carrito);
 
-const cantidad_pickeada = document.getElementById(`cant_pickeada_incart1`);
-const cant_pickeada_value = cantidad_pickeada.value;
-console.log(cant_pickeada_value);
-cantidad_pickeada.addEventListener("change", modificar_cantidad_pickeada(1));
+const efectuar_compra_btn = document.getElementById("efectuar_compra");
+efectuar_compra_btn.addEventListener("click", efectuar_compra);
+
+// IGNORAR CÓDIGO COMENTADO A PARTIR DE ACÁ
+
+
+// const cantidad_pickeada = document.getElementById(`cant_pickeada_incart1`);
+// cantidad_pickeada.addEventListener("change", ()=>{
+//     productos_en_carrito[0].cant_pickeada = cantidad_pickeada.value;
+//     console.log(cantidad_pickeada.value);
+//     console.log(productos_en_carrito);
+//     visualizar_carrito();
+// });
+
+
 
 // function chequeo_num_positivo(num) {
 //     return num <= 0 || isNaN(num);
