@@ -4,44 +4,30 @@ const tarifa_procesamiento_orden = 200;
 // Declaración de variables
 let total_a_pagar = 0;
 
-// Clase para productos
-class Producto {
-    constructor(id, nombre, precio, img) {
-        this.id = id;
-        this.nombre = nombre;
-        this.precio = precio;
-        this.cant_pickeada = 1;
-        this.img = img;
-    }
-}
-
-// Instanciación de productos
-const darth_vader = new Producto(1, "Busto Darth Vader", 1800, "../imgs/productos/darthvader.jpg");
-const millennium_falcon = new Producto(2, "Millennium Falcon", 3200, "../imgs/productos/millennium.jpg");
-const minas_tirith = new Producto(3, "Minas Tirith", 2800, "../imgs/productos/tirith.jpg");
-const grogu = new Producto(4, "Grogu", 2200, "../imgs/productos/grogu.jpg");
-const laberinto = new Producto(5, "Laberinto Cilindrico", 1100, "../imgs/productos/laberinto.jpg");
-
 // Declaración de arrays
 const productos_disponibles = [];
 const productos_en_carrito = [];
+
 // si hay productos agregados al carrito en el localStorage, los agrego al array correspondiente
 if (localStorage.getItem("productos_carrito")) {
     let productos_en_carrito_storage = JSON.parse(localStorage.getItem("productos_carrito"));
     productos_en_carrito.push(...productos_en_carrito_storage);
 }
 
-// Asignación de productos dispoinibles en un array
-productos_disponibles.push(darth_vader);
-productos_disponibles.push(millennium_falcon);
-productos_disponibles.push(minas_tirith);
-productos_disponibles.push(grogu);
-productos_disponibles.push(laberinto);
+// Ruta relativa para el stock de productos y fetch
+const productos_disponibles_json = "/json_prods/productos.json";
+fetch(productos_disponibles_json)
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(producto => {
+            productos_disponibles.push(producto);
+        });
+        crear_cards_productos(productos_disponibles, "cards_container");
+    });
 
 // Funciones
 function crear_cards_productos(array_productos, id_contenedor) {
     const cards_container = document.getElementById(id_contenedor);
-
     array_productos.forEach(producto => {
         let card = document.createElement("div");
         card.className = "col";
@@ -133,7 +119,7 @@ function eliminar_del_carrito(id_prod) {
 
 function vaciar_carrito() {
     productos_en_carrito.forEach(producto => {
-        producto.cant_pickeada=1;
+        producto.cant_pickeada = 1;
     });
     productos_en_carrito.splice(0, productos_en_carrito.length);
     Swal.fire({
@@ -147,14 +133,24 @@ function vaciar_carrito() {
     visualizar_carrito();
 }
 
-function efectuar_compra(){
+
+function efectuar_compra() {
+    let listado_productos_carrito = [];
     productos_en_carrito.forEach(producto => {
-        producto.cant_pickeada=1;
+        listado_productos_carrito.push(`${producto.nombre} ${producto.cant_pickeada}x $${producto.precio}`);
+    });
+    listado_productos_carrito = listado_productos_carrito.join("<br>");
+    productos_en_carrito.forEach(producto => {
+        producto.cant_pickeada = 1;
     });
     productos_en_carrito.splice(0, productos_en_carrito.length);
     Swal.fire({
         title: "Compra realizada exitosamente.",
-        text: '¡Gracias por tu compra! Monto: $'+total_carrito.innerText,
+        html: `<div>
+                    <p>¡Gracias por tu compra!</p>
+                    <p>Productos: <br> ${listado_productos_carrito}</p>
+                    <p>Monto Total: $${total_carrito.innerText}</p>
+                </div>`,
         color: "white",
         icon: "success",
         background: "#353535",
@@ -176,18 +172,19 @@ function modificar_cantidad_pickeada(id_prod) {
 function calcular_total_carrito(array_carrito, valor_base) {
     const total_carrito = document.getElementById("total_carrito");
     total_a_pagar = array_carrito.reduce((acumulador, prod) => acumulador + prod.precio * prod.cant_pickeada, valor_base);
-    total_a_pagar == valor_base ? total_carrito.innerText = 0 : total_carrito.innerText = `${total_a_pagar} (Productos: $${total_a_pagar - valor_base}, Tarifa de procesamiento de orden: $${valor_base}).`;
+    total_a_pagar == valor_base ? total_carrito.innerText = 0 : total_carrito.innerText = `${total_a_pagar}
+    (Productos: $${total_a_pagar - valor_base}, Tarifa de procesamiento de orden: $${valor_base}).`;
 }
 
-
-crear_cards_productos(productos_disponibles, "cards_container");
-visualizar_carrito();
 
 const vaciar_carrito_btn = document.getElementById("vaciar_carrito");
 vaciar_carrito_btn.addEventListener("click", vaciar_carrito);
 
 const efectuar_compra_btn = document.getElementById("efectuar_compra");
 efectuar_compra_btn.addEventListener("click", efectuar_compra);
+
+
+
 
 // IGNORAR CÓDIGO COMENTADO A PARTIR DE ACÁ
 

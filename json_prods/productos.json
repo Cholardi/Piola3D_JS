@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "nombre": "Busto Darth Vader",
+        "precio": 1800,
+        "cant_pickeada": 1,
+        "img": "../imgs/productos/darthvader.jpg"
+    },
+    {
+        "id": 2,
+        "nombre": "Millennium Falcon",
+        "precio": 3200,
+        "cant_pickeada": 1,
+        "img": "../imgs/productos/millennium.jpg"
+    },
+    {
+        "id": 3,
+        "nombre": "Minas Tirith",
+        "precio": 2800,
+        "cant_pickeada": 1,
+        "img": "../imgs/productos/tirith.jpg"
+    },
+    {
+        "id": 4,
+        "nombre": "Grogu",
+        "precio": 2200,
+        "cant_pickeada": 1,
+        "img": "../imgs/productos/grogu.jpg"
+    },
+    {
+        "id": 5,
+        "nombre": "Laberinto Cilindrico",
+        "precio": 1100,
+        "cant_pickeada": 1,
+        "img": "../imgs/productos/laberinto.jpg"
+    }
+]
