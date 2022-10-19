@@ -176,6 +176,7 @@ function calcular_total_carrito(array_carrito, valor_base) {
     (Productos: $${total_a_pagar - valor_base}, Tarifa de procesamiento de orden: $${valor_base}).`;
 }
 
+visualizar_carrito();
 
 const vaciar_carrito_btn = document.getElementById("vaciar_carrito");
 vaciar_carrito_btn.addEventListener("click", vaciar_carrito);
