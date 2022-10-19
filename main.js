@@ -15,7 +15,7 @@ if (localStorage.getItem("productos_carrito")) {
 }
 
 // Ruta relativa para el stock de productos y fetch
-const productos_disponibles_json = "/json_prods/productos.json";
+const productos_disponibles_json = "../json_prods/productos.json";
 fetch(productos_disponibles_json)
     .then(response => response.json())
     .then(data => {
