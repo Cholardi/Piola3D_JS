@@ -33,5 +33,26 @@
         "precio": 1100,
         "cant_pickeada": 1,
         "img": "../imgs/productos/laberinto.jpg"
+    },
+    {
+        "id": 6,
+        "nombre": "The Mandalorian",
+        "precio": 2000,
+        "cant_pickeada": 1,
+        "img": "../imgs/productos/mandalorian.jpg"
+    },
+    {
+        "id": 7,
+        "nombre": "Busto Batman",
+        "precio": 1300,
+        "cant_pickeada": 1,
+        "img": "../imgs/productos/batman.jpg"
+    },
+    {
+        "id": 8,
+        "nombre": "Busto Dumbledore",
+        "precio": 1300,
+        "cant_pickeada": 1,
+        "img": "../imgs/productos/dumbledore.jpg"
     }
 ]
