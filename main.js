@@ -84,7 +84,7 @@ function visualizar_carrito() {
 // Orden productos
 function ordenar_productos() {
     const ordenes = {
-        "default": orden_default,
+        default: orden_default,
         "a-z": ordenar_az,
         "z-a": ordenar_za,
         "menor-mayor": ordenar_menor_mayor,
@@ -146,7 +146,7 @@ function buscar_en_catalogo() {
     const texto_busqueda = searchbar.value.toLowerCase();
     productos_disponibles.forEach((prod) => {
         let nombre_prod = prod.nombre.toLowerCase();
-        if (nombre_prod.indexOf(texto_busqueda) !== -1) {
+        if (nombre_prod.includes(texto_busqueda)) {
             productos_buscados.push(prod);
         }
     });
@@ -262,17 +262,3 @@ searchbar.addEventListener("input", buscar_en_catalogo);
 
 const selector_orden = document.getElementById("order");
 selector_orden.addEventListener("change", ordenar_productos);
-
-
-// function filtrar_productos() {
-//     let limite_min = parseInt(prompt("Ingresá el precio mínimo (sin signo $): "));
-//     let limite_max = parseInt(prompt("Ingresá el precio máximo (sin signo $): "));
-//     const productos_disponibles_filtro_precio = productos_disponibles.filter(prod => prod.precio >= limite_min && prod.precio <= limite_max);
-//     if (productos_disponibles_filtro_precio.length == 0) {
-//         alert("No se encontró ningún producto que cumpla con los filtros aplicados.")
-//     }
-//     else {
-//         navegar_catalogo(productos_disponibles_filtro_precio);
-//         monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
-//     }
-// }
