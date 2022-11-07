@@ -7,7 +7,6 @@ let total_a_pagar = 0;
 // Declaración de arrays
 const productos_disponibles = [];
 const productos_en_carrito = [];
-const productos_buscados = [];
 
 // si hay productos agregados al carrito en el localStorage, los agrego al array correspondiente
 if (localStorage.getItem("productos_carrito")) {
@@ -82,6 +81,82 @@ function visualizar_carrito() {
     localStorage.setItem("productos_carrito", JSON.stringify(productos_en_carrito));
 }
 
+// Orden productos
+function ordenar_productos() {
+    const ordenes = {
+        "default": orden_default,
+        "a-z": ordenar_az,
+        "z-a": ordenar_za,
+        "menor-mayor": ordenar_menor_mayor,
+        "mayor-menor": ordenar_mayor_menor,
+    };
+
+    const ordenar_productos_criterio = ordenes[selector_orden.value];
+    ordenar_productos_criterio();
+}
+
+function orden_default() {
+    cards_container.innerHTML = "";
+    crear_cards_productos(productos_disponibles, "cards_container");
+}
+
+function ordenar_az() {
+    const productos_disponibles_az = [...productos_disponibles].sort((a, b) => {
+        if (a.nombre < b.nombre) {
+            return -1;
+        }
+        if (a.nombre > b.nombre) {
+            return 1;
+        }
+    });
+    cards_container.innerHTML = "";
+    crear_cards_productos(productos_disponibles_az, "cards_container");
+}
+
+function ordenar_za() {
+    const productos_disponibles_za = [...productos_disponibles].sort((a, b) => {
+        if (a.nombre < b.nombre) {
+            return 1;
+        }
+        if (a.nombre > b.nombre) {
+            return -1;
+        }
+    });
+    cards_container.innerHTML = "";
+    crear_cards_productos(productos_disponibles_za, "cards_container");
+}
+
+function ordenar_menor_mayor() {
+    const productos_disponibles_menor_mayor = [...productos_disponibles].sort((a, b) => a.precio - b.precio);
+    cards_container.innerHTML = "";
+    crear_cards_productos(productos_disponibles_menor_mayor, "cards_container");
+}
+
+function ordenar_mayor_menor() {
+    const productos_disponibles_mayor_menor = [...productos_disponibles].sort((a, b) => b.precio - a.precio);
+    cards_container.innerHTML = "";
+    crear_cards_productos(productos_disponibles_mayor_menor, "cards_container");
+}
+
+// Búsqueda
+function buscar_en_catalogo() {
+    const cards_container = document.getElementById("cards_container");
+    cards_container.innerHTML = "";
+    const productos_buscados = [];
+    const texto_busqueda = searchbar.value.toLowerCase();
+    productos_disponibles.forEach((prod) => {
+        let nombre_prod = prod.nombre.toLowerCase();
+        if (nombre_prod.indexOf(texto_busqueda) !== -1) {
+            productos_buscados.push(prod);
+        }
+    });
+    crear_cards_productos(productos_buscados, "cards_container");
+    if (cards_container.innerHTML === "") {
+        cards_container.innerHTML = `<p class="text-white w-100 text-center">No se encontró ningún producto</p>`;
+    }
+}
+
+// Carrito
 function producto_ya_en_carrito(id_prod) {
     const producto_ya_en_carrito = productos_en_carrito.find((producto) => producto.id === id_prod);
     return producto_ya_en_carrito;
@@ -181,3 +256,23 @@ vaciar_carrito_btn.addEventListener("click", vaciar_carrito);
 
 const efectuar_compra_btn = document.getElementById("efectuar_compra");
 efectuar_compra_btn.addEventListener("click", efectuar_compra);
+
+const searchbar = document.getElementById("searchbar");
+searchbar.addEventListener("input", buscar_en_catalogo);
+
+const selector_orden = document.getElementById("order");
+selector_orden.addEventListener("change", ordenar_productos);
+
+
+// function filtrar_productos() {
+//     let limite_min = parseInt(prompt("Ingresá el precio mínimo (sin signo $): "));
+//     let limite_max = parseInt(prompt("Ingresá el precio máximo (sin signo $): "));
+//     const productos_disponibles_filtro_precio = productos_disponibles.filter(prod => prod.precio >= limite_min && prod.precio <= limite_max);
+//     if (productos_disponibles_filtro_precio.length == 0) {
+//         alert("No se encontró ningún producto que cumpla con los filtros aplicados.")
+//     }
+//     else {
+//         navegar_catalogo(productos_disponibles_filtro_precio);
+//         monto_carrito(productos_en_carrito, tarifa_procesamiento_orden);
+//     }
+// }
